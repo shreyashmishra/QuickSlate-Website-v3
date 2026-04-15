@@ -1,0 +1,12 @@
+$color-primary: #111111;
+$color-secondary: #d8cfc1;
+$color-neutral-light: #ffffff;
+$color-neutral-dark: #1b1b1b;
+
+:root {
+  --color-primary: #{$color-primary};
+  --color-secondary: #{$color-secondary};
+  --color-neutral-light: #{$color-neutral-light};
+  --color-neutral-dark: #{$color-neutral-dark};
+}
+ 

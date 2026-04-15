@@ -1,0 +1,61 @@
+.team-section {
+    height: auto;
+    padding: 0 5vw 3rem 5vw;
+    h1 {
+        font-size: 3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+}
+
+.logo-design {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+}
+
+.member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: team-slide-up 480ms ease forwards;
+}
+
+/* simple stagger for first few members */
+.member:nth-child(1) { animation-delay: 60ms; }
+.member:nth-child(2) { animation-delay: 140ms; }
+.member:nth-child(3) { animation-delay: 220ms; }
+.member:nth-child(4) { animation-delay: 300ms; }
+.member:nth-child(5) { animation-delay: 380ms; }
+.member:nth-child(6) { animation-delay: 460ms; }
+
+.avatar {
+    position: relative;
+    width: clamp(160px, 22vw, 220px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--color-secondary);
+    background: #000;
+    transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.avatar-img { object-fit: cover; }
+
+.member p { text-align: center; font-weight: 600; }
+
+.member:hover .avatar {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+@keyframes team-slide-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .team-section h1 { font-size: 2.25rem; }
+}

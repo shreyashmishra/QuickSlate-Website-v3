@@ -1,0 +1,162 @@
+.about-page {
+  padding: clamp(2rem, 4vw, 4rem);
+  background: #111111;
+  color: #f7f2ea;
+}
+
+.about-hero,
+.about-grid,
+.about-team,
+.about-faq {
+  max-width: 82rem;
+  margin: 0 auto;
+}
+
+.about-hero {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.about-hero p {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: rgba(247, 242, 234, 0.55);
+}
+
+.about-hero h1 {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 0.95;
+  color: #f7f2ea;
+}
+
+.about-hero span {
+  max-width: 40rem;
+  color: rgba(247, 242, 234, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.about-grid,
+.about-team__grid,
+.about-faq__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.about-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.about-faq__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.about-card,
+.about-team__card {
+  padding: 1.6rem;
+  border: 1px solid rgba(247, 242, 234, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1.25rem;
+  transition: background 180ms ease, border-color 180ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(247, 242, 234, 0.2);
+  }
+}
+
+.about-card h2,
+.about-card h3,
+.about-team__heading h2,
+.about-team__card h3 {
+  margin: 0 0 0.8rem;
+  color: #f7f2ea;
+}
+
+.about-team,
+.about-faq {
+  padding: 2.5rem 0 0;
+}
+
+.about-team__heading {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 42rem;
+  margin-bottom: 1.4rem;
+}
+
+.about-team__heading p,
+.about-card p,
+.about-team__card p,
+.about-team__card span {
+  margin: 0;
+  color: rgba(247, 242, 234, 0.72);
+  line-height: 1.6;
+}
+
+.about-team__grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.about-team__card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.about-team__image-wrap,
+.about-team__placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #1b1b1b, #c9bfae);
+}
+
+.about-team__image {
+  object-fit: cover;
+}
+
+.about-team__placeholder {
+  display: grid;
+  place-items: center;
+}
+
+.about-team__placeholder span {
+  font-size: 3rem;
+  color: #f7f2ea;
+}
+
+.about-team__meta {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.2rem;
+}
+
+.about-team__meta p {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+}
+
+.about-team__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.about-team__links a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .about-grid,
+  .about-team__grid,
+  .about-faq__grid {
+    grid-template-columns: 1fr;
+  }
+}

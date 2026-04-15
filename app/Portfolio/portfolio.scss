@@ -1,0 +1,138 @@
+.portfolio-page {
+  padding: clamp(2rem, 4vw, 4rem);
+  background: #111111;
+  color: #f7f2ea;
+}
+
+.portfolio-hero,
+.portfolio-block {
+  max-width: 88rem;
+  margin: 0 auto;
+}
+
+.portfolio-hero {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(2rem, 5vw, 5rem) 0 2rem;
+}
+
+.portfolio-kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: rgba(247, 242, 234, 0.55);
+}
+
+.portfolio-hero h1 {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 0.95;
+  color: #f7f2ea;
+}
+
+.portfolio-hero p {
+  max-width: 42rem;
+  margin: 0;
+  color: rgba(247, 242, 234, 0.7);
+  line-height: 1.6;
+}
+
+.portfolio-block {
+  padding: 1.5rem 0 3rem;
+}
+
+.portfolio-section-heading {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 42rem;
+  margin-bottom: 1.75rem;
+}
+
+.portfolio-section-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: #f7f2ea;
+}
+
+.portfolio-section-heading p {
+  margin: 0;
+  color: rgba(247, 242, 234, 0.7);
+}
+
+.portfolio-link-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.portfolio-link-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.4rem;
+  border: 1px solid rgba(247, 242, 234, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  transition: background 180ms ease, border-color 180ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(247, 242, 234, 0.2);
+  }
+}
+
+.portfolio-link-card p,
+.portfolio-link-card span {
+  margin: 0;
+  color: rgba(247, 242, 234, 0.6);
+}
+
+.portfolio-link-card p {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+}
+
+.portfolio-link-card h3 {
+  margin: 0;
+  color: #f7f2ea;
+  font-size: 1rem;
+}
+
+.portfolio-link-card span {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.portfolio-link-card a {
+  display: inline-block;
+  width: fit-content;
+  margin-top: 0.25rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(247, 242, 234, 0.25);
+  border-radius: 999px;
+  color: rgba(247, 242, 234, 0.84);
+  text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(247, 242, 234, 0.45);
+    color: #f7f2ea;
+  }
+}
+
+@media (max-width: 1024px) {
+  .portfolio-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .portfolio-link-grid {
+    grid-template-columns: 1fr;
+  }
+}
