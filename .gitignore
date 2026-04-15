@@ -40,3 +40,4 @@ backdate.sh
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.next
