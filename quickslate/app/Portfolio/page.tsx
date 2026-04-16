@@ -1,11 +1,14 @@
-'use client';
-
 import Link from "next/link";
 import ProjectCarousel from "@/app/components/ProjectCarousel";
-import { portfolioCarouselItems, portfolioLinks } from "@/app/site-content";
+import { portfolioLinks } from "@/app/site-content";
+import { fetchWebsiteBCarouselItems } from "@/lib/website-b-carousel";
 import "./portfolio.scss";
 
-export default function Portfolio() {
+export const dynamic = "force-dynamic";
+
+export default async function Portfolio() {
+  const carousel = await fetchWebsiteBCarouselItems();
+
   return (
     <main className="portfolio-page">
       <section className="portfolio-hero">
@@ -18,7 +21,18 @@ export default function Portfolio() {
       </section>
 
       <section className="portfolio-block">
-        <ProjectCarousel items={portfolioCarouselItems} />
+        {carousel.items.length > 0 ? (
+          <ProjectCarousel items={carousel.items} />
+        ) : (
+          <div className="portfolio-feed-state" role="status">
+            <p className="portfolio-kicker">Shared carousel</p>
+            <h2>Carousel images are not available yet.</h2>
+            <p>
+              {carousel.errorMessage ??
+                "Website B has not published any visible carousel images yet."}
+            </p>
+          </div>
+        )}
       </section>
 
       <section className="portfolio-block">

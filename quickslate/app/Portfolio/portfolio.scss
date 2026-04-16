@@ -43,6 +43,31 @@
   padding: 1.5rem 0 3rem;
 }
 
+.portfolio-feed-state {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  border: 1px solid rgba(247, 242, 234, 0.12);
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.portfolio-feed-state h2,
+.portfolio-feed-state p {
+  margin: 0;
+}
+
+.portfolio-feed-state h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: #f7f2ea;
+}
+
+.portfolio-feed-state p:last-child {
+  max-width: 44rem;
+  color: rgba(247, 242, 234, 0.72);
+  line-height: 1.6;
+}
+
 .portfolio-section-heading {
   display: grid;
   gap: 0.8rem;
