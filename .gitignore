@@ -41,3 +41,4 @@ backdate.sh
 *.tsbuildinfo
 next-env.d.ts
 .next
+resume*

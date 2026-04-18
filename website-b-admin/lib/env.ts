@@ -1,10 +1,16 @@
 import { z } from "zod";
 
-const integerString = z
+const integerString = z.preprocess((value) => {
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  return value;
+}, z
   .string()
   .trim()
   .regex(/^\d+$/)
-  .transform((value) => Number(value));
+  .transform((value) => Number(value)));
 
 const serverEnvSchema = z.object({
   APP_BASE_URL: z.string().url(),
