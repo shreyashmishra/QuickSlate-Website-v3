@@ -4,9 +4,15 @@ import { permanentlyDeleteImageForUser } from "@/lib/images/service";
 
 export const runtime = "nodejs";
 
+type PermanentImageRouteContext = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
 export async function DELETE(
   _request: Request,
-  context: RouteContext<"/api/images/[id]/permanent">,
+  context: PermanentImageRouteContext,
 ) {
   try {
     const user = await requireApiAuthorizedUser();

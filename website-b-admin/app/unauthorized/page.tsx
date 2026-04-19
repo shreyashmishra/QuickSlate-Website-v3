@@ -21,10 +21,10 @@ export default async function UnauthorizedPage() {
           This account cannot open the dashboard.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-stone-600">
-          Dashboard access requires a valid Auth0 session plus a matching active
-          entry in the PostgreSQL allowlist. Accounts that are missing,
-          inactive, or missing an email claim are blocked on the server before
-          the portal renders.
+          Dashboard access requires a valid Auth0 session plus synced
+          authorization claims for an active allowlisted account. Accounts that
+          are missing, inactive, or missing an email claim are blocked on the
+          server before the portal renders.
         </p>
 
         <div className="mt-8 rounded-[1.75rem] border border-stone-200 bg-stone-50/90 p-6">
@@ -37,10 +37,16 @@ export default async function UnauthorizedPage() {
               : accessState.sessionUser.email ?? "Signed in without an email claim"}
           </p>
           <p className="mt-3 text-sm leading-7 text-stone-600">
-            Only the seeded admin account is allowlisted in this phase:
-            <span className="ml-2 font-mono text-stone-950">
-              shreyashmishra2016@gmail.com
-            </span>
+            {accessState.kind === "unauthorized" &&
+            accessState.reason === "session-stale"
+              ? "Your session was created before authorization claims were added. Sign out and sign back in to refresh access data."
+              : "Only the seeded admin account is allowlisted in this phase:"}
+            {!(accessState.kind === "unauthorized" &&
+              accessState.reason === "session-stale") ? (
+              <span className="ml-2 font-mono text-stone-950">
+                shreyashmishra2016@gmail.com
+              </span>
+            ) : null}
           </p>
         </div>
 

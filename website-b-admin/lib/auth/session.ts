@@ -2,7 +2,7 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 import { HttpError } from "@/lib/api/http";
-import { findAllowedUserByEmail } from "@/lib/allowlist";
+import { readSessionAuthorizationClaims } from "@/lib/auth/claims";
 import { getAuth0Client } from "@/lib/auth0";
 import type {
   AccessState,
@@ -31,7 +31,10 @@ function getDisplayName(user: Record<string, unknown>, email: string | null) {
   return email ? email.split("@")[0] : "Authenticated user";
 }
 
-export async function getSessionUserSnapshot(): Promise<SessionUserSnapshot | null> {
+async function getSessionContext(): Promise<{
+  authorizationClaims: ReturnType<typeof readSessionAuthorizationClaims>;
+  sessionUser: SessionUserSnapshot;
+} | null> {
   const session = await getAuth0Client().getSession();
 
   if (!session?.user) {
@@ -43,20 +46,30 @@ export async function getSessionUserSnapshot(): Promise<SessionUserSnapshot | nu
   );
 
   return {
-    email,
-    name: getDisplayName(session.user, email),
-    picture:
-      typeof session.user.picture === "string" ? session.user.picture : null,
-    sub: typeof session.user.sub === "string" ? session.user.sub : "unknown",
+    authorizationClaims: readSessionAuthorizationClaims(session.user),
+    sessionUser: {
+      email,
+      name: getDisplayName(session.user, email),
+      picture:
+        typeof session.user.picture === "string" ? session.user.picture : null,
+      sub: typeof session.user.sub === "string" ? session.user.sub : "unknown",
+    },
   };
 }
 
-export async function getCurrentAccessState(): Promise<AccessState> {
-  const sessionUser = await getSessionUserSnapshot();
+export async function getSessionUserSnapshot(): Promise<SessionUserSnapshot | null> {
+  const context = await getSessionContext();
+  return context?.sessionUser ?? null;
+}
 
-  if (!sessionUser) {
+export async function getCurrentAccessState(): Promise<AccessState> {
+  const context = await getSessionContext();
+
+  if (!context) {
     return { kind: "anonymous" };
   }
+
+  const { authorizationClaims, sessionUser } = context;
 
   if (!sessionUser.email) {
     return {
@@ -66,9 +79,15 @@ export async function getCurrentAccessState(): Promise<AccessState> {
     };
   }
 
-  const allowedUser = await findAllowedUserByEmail(sessionUser.email);
+  if (!authorizationClaims) {
+    return {
+      kind: "unauthorized",
+      reason: "session-stale",
+      sessionUser,
+    };
+  }
 
-  if (!allowedUser) {
+  if (!authorizationClaims.allowlisted) {
     return {
       kind: "unauthorized",
       reason: "not-allowlisted",
@@ -76,21 +95,25 @@ export async function getCurrentAccessState(): Promise<AccessState> {
     };
   }
 
-  if (!allowedUser.isActive) {
+  if (
+    !authorizationClaims.isActive ||
+    !authorizationClaims.role ||
+    authorizationClaims.allowedUserId === null
+  ) {
     return {
       kind: "unauthorized",
-      reason: "inactive",
+      reason: authorizationClaims.isActive ? "session-stale" : "inactive",
       sessionUser,
     };
   }
 
   const user: AuthorizedPortalUser = {
-    allowedUserId: allowedUser.id,
-    email: allowedUser.email,
+    allowedUserId: authorizationClaims.allowedUserId,
+    email: sessionUser.email,
     isActive: true,
     name: sessionUser.name,
     picture: sessionUser.picture,
-    role: allowedUser.role,
+    role: authorizationClaims.role,
     sub: sessionUser.sub,
   };
 

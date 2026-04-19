@@ -1,4 +1,5 @@
 export const portalRoles = ["uploader", "admin"] as const;
+export const quickSlateAuthorizationClaimKey = "quickSlateAuthorization" as const;
 
 export type PortalRole = (typeof portalRoles)[number];
 
@@ -7,6 +8,14 @@ export type SessionUserSnapshot = {
   name: string;
   picture: string | null;
   sub: string;
+};
+
+export type SessionAuthorizationClaims = {
+  allowlisted: boolean;
+  allowedUserId: number | null;
+  isActive: boolean;
+  role: PortalRole | null;
+  syncedAt: string;
 };
 
 export type AllowedUserRecord = {
@@ -32,7 +41,7 @@ export type AccessState =
   | { kind: "anonymous" }
   | {
       kind: "unauthorized";
-      reason: "inactive" | "missing-email" | "not-allowlisted";
+      reason: "inactive" | "missing-email" | "not-allowlisted" | "session-stale";
       sessionUser: SessionUserSnapshot;
     }
   | {

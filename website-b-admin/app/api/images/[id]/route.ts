@@ -4,9 +4,15 @@ import { softDeleteImageForUser, updateImageForUser } from "@/lib/images/service
 
 export const runtime = "nodejs";
 
+type ImageRouteContext = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
 export async function PATCH(
   request: Request,
-  context: RouteContext<"/api/images/[id]">,
+  context: ImageRouteContext,
 ) {
   try {
     const user = await requireApiAuthorizedUser();
@@ -22,7 +28,7 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  context: RouteContext<"/api/images/[id]">,
+  context: ImageRouteContext,
 ) {
   try {
     const user = await requireApiAuthorizedUser();
