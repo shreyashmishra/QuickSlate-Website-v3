@@ -1,10 +1,12 @@
 'use client';
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import "./project-carousel.scss";
 
 export type ProjectCarouselItem = {
+  altText?: string;
   category?: string;
   description?: string;
   href?: string;
@@ -17,11 +19,31 @@ type ProjectCarouselProps = {
   items: ProjectCarouselItem[];
 };
 
+function getNeighboringIndices(index: number, total: number) {
+  if (total === 0) {
+    return [];
+  }
+
+  if (total === 1) {
+    return [0];
+  }
+
+  const previous = (index - 1 + total) % total;
+  const next = (index + 1) % total;
+
+  return Array.from(new Set([previous, index, next]));
+}
+
+function carouselImageLoader({ src }: { src: string }) {
+  return src;
+}
+
 export default function ProjectCarousel({ items }: ProjectCarouselProps) {
   const [index, setIndex] = useState(0);
   const startXRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const activeIndex = items.length > 0 ? index % items.length : 0;
+  const renderableIndices = new Set(getNeighboringIndices(activeIndex, items.length));
 
   useEffect(() => {
     if (items.length === 0) {
@@ -107,18 +129,33 @@ export default function ProjectCarousel({ items }: ProjectCarouselProps) {
           className="project-carousel__track"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
-          {items.map((item) => (
+          {items.map((item, slideIndex) => {
+            const imageSrc = item.image;
+            const shouldRenderImage =
+              Boolean(imageSrc) && renderableIndices.has(slideIndex);
+            const loading = slideIndex === activeIndex ? "eager" : "lazy";
+            const fetchPriority = slideIndex === activeIndex ? "high" : "low";
+
+            return (
             <article className="project-carousel__slide" key={item.id}>
               {item.href ? (
                 <Link href={item.href} target="_blank" className="project-carousel__card">
-                  <div
-                    className="project-carousel__visual"
-                    style={
-                      item.image
-                        ? { backgroundImage: `linear-gradient(rgba(12, 12, 12, 0.2), rgba(12, 12, 12, 0.65)), url(${item.image})` }
-                        : undefined
-                    }
-                  >
+                  <div className="project-carousel__visual">
+                    {shouldRenderImage && imageSrc ? (
+                      <Image
+                        alt={item.altText ?? item.title}
+                        className="project-carousel__image"
+                        decoding="async"
+                        fetchPriority={fetchPriority}
+                        fill
+                        loader={carouselImageLoader}
+                        loading={loading}
+                        sizes="(max-width: 900px) 100vw, 60vw"
+                        src={imageSrc}
+                        unoptimized
+                      />
+                    ) : null}
+                    <div className="project-carousel__image-overlay" aria-hidden="true" />
                     {!item.image ? (
                       <div className="project-carousel__placeholder">
                         {item.category ? <span>{item.category}</span> : null}
@@ -137,14 +174,22 @@ export default function ProjectCarousel({ items }: ProjectCarouselProps) {
                 </Link>
               ) : (
                 <div className="project-carousel__card">
-                  <div
-                    className="project-carousel__visual"
-                    style={
-                      item.image
-                        ? { backgroundImage: `linear-gradient(rgba(12, 12, 12, 0.2), rgba(12, 12, 12, 0.65)), url(${item.image})` }
-                        : undefined
-                    }
-                  >
+                  <div className="project-carousel__visual">
+                    {shouldRenderImage && imageSrc ? (
+                      <Image
+                        alt={item.altText ?? item.title}
+                        className="project-carousel__image"
+                        decoding="async"
+                        fetchPriority={fetchPriority}
+                        fill
+                        loader={carouselImageLoader}
+                        loading={loading}
+                        sizes="(max-width: 900px) 100vw, 60vw"
+                        src={imageSrc}
+                        unoptimized
+                      />
+                    ) : null}
+                    <div className="project-carousel__image-overlay" aria-hidden="true" />
                     {!item.image ? (
                       <div className="project-carousel__placeholder">
                         {item.category ? <span>{item.category}</span> : null}
@@ -163,7 +208,8 @@ export default function ProjectCarousel({ items }: ProjectCarouselProps) {
                 </div>
               )}
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
 

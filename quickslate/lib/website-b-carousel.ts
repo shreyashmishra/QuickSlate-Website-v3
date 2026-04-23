@@ -88,6 +88,7 @@ function parsePublicImageFeed(payload: unknown): PublicImageFeedResponse {
 
 function toProjectCarouselItem(image: PublicCarouselImage): ProjectCarouselItem {
   return {
+    altText: image.alt_text ?? image.title ?? "QuickSlate carousel image",
     category: undefined,
     description: image.caption ?? undefined,
     id: image.id,
